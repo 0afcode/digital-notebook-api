@@ -20,6 +20,6 @@ export class User {
   @Column({ nullable: true })
   region: string;
 
-  @Column({ nullable: false, default: false })
+  @Column({ nullable: true, default: false })
   isActive: boolean;
 }
