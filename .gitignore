@@ -43,6 +43,9 @@ lerna-debug.log*
 .temp
 .tmp
 
+# package manager stuff
+/.yarn
+
 # Runtime data
 pids
 *.pid
