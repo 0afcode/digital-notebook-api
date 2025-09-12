@@ -11,7 +11,13 @@ import { DataSourceOptions } from 'typeorm';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['src/env/.env.development'],
+      envFilePath: [
+        // Priority order: most specific to least specific
+        `src/env/.env.${process.env.NODE_ENV}.local`,
+        `src/env/.env.${process.env.NODE_ENV}`,
+        'src/env/.env.local',
+        'src/env/.env',
+      ],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
