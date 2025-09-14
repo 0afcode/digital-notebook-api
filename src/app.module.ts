@@ -6,6 +6,8 @@ import { UserModule } from './user/user.module';
 import { DbTestService } from './dbtest.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSourceOptions } from 'typeorm';
+import { NotebookModule } from './notebook/notebook.module';
+import { SectionModule } from './section/section.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { DataSourceOptions } from 'typeorm';
         }) as DataSourceOptions,
     }),
     UserModule,
+    NotebookModule,
+    SectionModule,
   ],
   controllers: [AppController],
   providers: [AppService, DbTestService],
