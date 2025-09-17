@@ -7,16 +7,16 @@ import {
 
 export abstract class AuditBaseEntity {
   @CreateDateColumn({ type: 'timestamp' })
-  createdDate: Date;
+  createdDate: string;
 
-  @UpdateDateColumn({ type: 'timestamp' })
-  modifiedDate: Date;
+  @UpdateDateColumn({ nullable: true, type: 'timestamp' })
+  modifiedDate?: string;
 
-  @DeleteDateColumn({ type: 'timestamp' })
-  deletedDate?: Date;
+  @DeleteDateColumn({ nullable: true, type: 'timestamp' })
+  deletedDate?: string;
 
-  @Column({ nullable: true })
-  createdBy?: string;
+  @Column()
+  createdBy: string;
 
   @Column({ nullable: true })
   modifiedBy?: string;
