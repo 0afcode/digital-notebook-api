@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { SectionProvider } from './section.provider';
 
-@Module({})
+@Module({
+  imports: [SectionProvider],
+  exports: [SectionProvider],
+})
 export class SectionModule {}
