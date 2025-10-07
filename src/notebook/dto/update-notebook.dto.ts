@@ -1,17 +1,16 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class UpdateNotebookDTO {
   @IsString()
+  @IsOptional()
   name?: string;
 
   @IsString()
+  @IsOptional()
   description?: string;
 
-  updatedDate?: string;
-
-  updatedBy?: string;
-
-  deletedDate?: string;
-
-  deletedBy?: string;
+  @IsString()
+  @IsOptional()
+  @IsUUID()
+  userId?: string;
 }

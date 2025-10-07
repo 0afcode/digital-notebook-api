@@ -6,6 +6,8 @@ import { CreateNotebookDTO } from './dto/create-notebook.dto';
 import { SearchNotebookDTO } from './dto/search-notebook.dto';
 import { UpdateNotebookDTO } from './dto/update-notebook.dto';
 import { BaseSearchDTO } from 'src/common/BaseSearchDTO.abstract';
+import { AuditBaseEntity } from 'src/common/AuditBaseEntity.abstract';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class NotebookProvider {
@@ -22,9 +24,14 @@ export class NotebookProvider {
   async update(
     id: string,
     data: UpdateNotebookDTO,
+    user: User,
   ): Promise<UpdateResult | null> {
     const notebookExists = await this.findById(id);
     if (notebookExists) {
+      if (data.description) notebookExists.description = data.description;
+      if (data.name) notebookExists.name = data.name;
+      if (data.userId) notebookExists.userId = data.userId;
+      AuditBaseEntity.upateAuditFields(notebookExists, 'update', user);
       return this.notebookRepository.update(id, data);
     }
     return null;
@@ -65,17 +72,15 @@ export class NotebookProvider {
     return queryBuilder.getMany();
   }
 
-  async delete(id: string): Promise<boolean> {
+  async delete(id: string, user: User): Promise<boolean> {
     try {
-      const result = await this.update(id, {
-        deletedDate: new Date().toISOString(),
-        deletedBy: 'SYSTEM',
-      });
-      if (!result) return false;
-      await this.notebookRepository.delete(id);
-      return true;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
+      const data = await this.findById(id);
+      if (!data) return false;
+      AuditBaseEntity.upateAuditFields(data, 'delete', user);
+      const res = await this.update(id, data, user);
+      return !!res;
+    } catch (e) {
+      console.log(e);
       return false;
     }
   }

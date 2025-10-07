@@ -21,8 +21,11 @@ export class Notebook extends AuditBaseEntity {
   @Column({ nullable: true })
   description: string;
 
+  @Column()
+  userId: string;
+
   @ManyToOne(() => User, (user: User) => user.notebooks)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @OneToMany(() => Section, (sct) => sct.notebook, { lazy: true })

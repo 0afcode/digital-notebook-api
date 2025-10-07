@@ -1,3 +1,4 @@
+import { User } from 'src/user/user.entity';
 import {
   CreateDateColumn,
   UpdateDateColumn,
@@ -23,4 +24,25 @@ export abstract class AuditBaseEntity {
 
   @Column({ nullable: true })
   deletedBy?: string;
+
+  public static upateAuditFields<T extends AuditBaseEntity>(
+    data: T,
+    operation: string,
+    user: User,
+  ) {
+    if (operation === 'update') {
+      data.modifiedBy = user.id || 'SYSTEM';
+      data.modifiedDate = new Date().toISOString();
+    }
+
+    if (operation === 'create') {
+      data.createdBy = user.id || 'SYSTEM';
+      data.createdDate = new Date().toISOString();
+    }
+
+    if (operation === 'delete') {
+      data.deletedBy = user.id || 'SYSTEM';
+      data.deletedDate = new Date().toISOString();
+    }
+  }
 }
