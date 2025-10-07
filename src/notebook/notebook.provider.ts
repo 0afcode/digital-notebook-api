@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Notebook } from './notebook.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOperator, Like, Repository, UpdateResult } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateNotebookDTO } from './dto/create-notebook.dto';
 import { SearchNotebookDTO } from './dto/search-notebook.dto';
-import { Override } from 'src/common/Override';
 import { UpdateNotebookDTO } from './dto/update-notebook.dto';
-
-type PartiallySearcheable = Override<
-  SearchNotebookDTO,
-  { name: FindOperator<string>; description: FindOperator<string> }
->;
+import { BaseSearchDTO } from 'src/common/BaseSearchDTO.abstract';
 
 @Injectable()
 export class NotebookProvider {
@@ -40,18 +35,34 @@ export class NotebookProvider {
   }
 
   async find(searchParams: SearchNotebookDTO): Promise<Notebook[]> {
-    const where: Partial<PartiallySearcheable> = {};
-    if (searchParams.id) where.id = searchParams.id;
-    if (searchParams.userId) where.userId = searchParams.userId;
-    if (searchParams.createdBy) where.createdBy = searchParams.createdBy;
-    if (searchParams.modifiedBy) where.modifiedBy = searchParams.modifiedBy;
-    if (searchParams.deletedBy) where.deletedBy = searchParams.deletedBy;
+    const queryBuilder = this.notebookRepository.createQueryBuilder('notebook');
 
-    // apply LIKE for strings
-    if (searchParams.name) where.name = Like(`%${searchParams.name}%`);
-    if (searchParams.description)
-      where.description = Like(`%${searchParams.description}%`);
-    return this.notebookRepository.find({ where });
+    if (searchParams.id) {
+      queryBuilder.andWhere('notebook.id = :id', { id: searchParams.id });
+    }
+
+    if (searchParams.name) {
+      queryBuilder.andWhere('LOWER(notebook.name) LIKE :name', {
+        name: `%${searchParams.name.toLocaleLowerCase()}%`,
+      });
+    }
+
+    if (searchParams.description) {
+      queryBuilder.andWhere('LOWER(notebook.description) LIKE :description', {
+        description: `${searchParams.description.toLowerCase()}`,
+      });
+    }
+
+    if (searchParams.userId) {
+      queryBuilder.andWhere('notebook.userId = :userId', {
+        userId: searchParams.userId,
+      });
+    }
+
+    // audit field searches
+    BaseSearchDTO.applyAuditFilters(queryBuilder, searchParams, 'notebook');
+
+    return queryBuilder.getMany();
   }
 
   async delete(id: string): Promise<boolean> {
