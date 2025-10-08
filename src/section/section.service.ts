@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Section } from './section.entity';
-// import { CreateSectionDTO } from './dto/create-section.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateSectionDTO } from './dto/create-section.dto';
 import { AuditBaseEntity } from 'src/common/AuditBaseEntity.abstract';
@@ -71,6 +70,10 @@ export class SectionProvider {
     BaseSearchDTO.applyAuditFilters(queryBuilder, searchParams, 'section');
 
     return queryBuilder.getMany();
+  }
+
+  async findById(id: string): Promise<Section | null> {
+    return this.sectionRepository.findOneBy({ id });
   }
 
   async delete(id: string, user: User): Promise<boolean> {
