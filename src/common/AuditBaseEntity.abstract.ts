@@ -4,6 +4,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Column,
+  ObjectLiteral,
 } from 'typeorm';
 
 export abstract class AuditBaseEntity {
@@ -25,23 +26,22 @@ export abstract class AuditBaseEntity {
   @Column({ nullable: true })
   deletedBy?: string;
 
-  public static upateAuditFields<T extends AuditBaseEntity>(
+  public static updateAuditFields<T extends AuditBaseEntity | ObjectLiteral>(
     data: T,
-    operation: string,
+    operation: 'create' | 'update' | 'delete',
     user: User,
   ) {
+    const userId = user?.id || 'SYSTEM';
     if (operation === 'update') {
-      data.modifiedBy = user.id || 'SYSTEM';
-      data.modifiedDate = new Date().toISOString();
+      data.modifiedBy = userId;
     }
 
     if (operation === 'create') {
-      data.createdBy = user.id || 'SYSTEM';
-      data.createdDate = new Date().toISOString();
+      data.createdBy = userId;
     }
 
     if (operation === 'delete') {
-      data.deletedBy = user.id || 'SYSTEM';
+      data.deletedBy = userId;
       data.deletedDate = new Date().toISOString();
     }
   }
