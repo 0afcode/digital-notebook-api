@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsArray, MaxLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength, IsUUID } from 'class-validator';
 
 export class UpdateSectionDTO {
   @IsOptional()
@@ -7,10 +7,6 @@ export class UpdateSectionDTO {
   name?: string;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true }) // Ensures every item in the array is a string
-  tags?: string[];
-
-  @IsOptional()
+  @IsUUID()
   notebookId?: string;
 }

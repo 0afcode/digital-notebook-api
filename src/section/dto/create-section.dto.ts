@@ -1,9 +1,9 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 
 export class CreateSectionDTO {
   @IsString()
-  title: string;
+  name: string;
 
-  @IsArray()
-  tags: string[];
+  @IsUUID()
+  noteboodId: string;
 }

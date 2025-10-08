@@ -10,14 +10,16 @@ import {
 
 @Entity()
 export class Section extends AuditBaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    default: 'New Section',
+  })
   name: string;
 
   @Column()
-  tags: string[];
+  notebookId: string;
 
   @ManyToOne(() => Notebook, (ntb: Notebook) => ntb.sections)
   @JoinColumn({ name: 'notebookId' })

@@ -1,25 +1,18 @@
-import { IsOptional, IsString, IsArray } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { BaseSearchDTO } from 'src/common/BaseSearchDTO.abstract';
 
-export class SectionSearchDTO {
+export class SectionSearchDTO extends BaseSearchDTO {
+  @IsOptional()
+  @IsUUID()
+  id?: string;
+
   @IsOptional()
   @IsString()
   name?: string;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  tags?: string[];
-
-  @IsOptional()
+  @IsUUID()
   notebookId?: string;
-
-  @IsOptional()
-  @IsString()
-  createdAt_after?: string;
-
-  @IsOptional()
-  @IsString()
-  sortBy?: 'name' | 'createdAt';
 
   @IsOptional()
   @IsString()
