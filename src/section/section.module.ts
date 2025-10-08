@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SectionProvider } from './section.provider';
+import { SectionProvider } from './section.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Section } from './section.entity';
 
