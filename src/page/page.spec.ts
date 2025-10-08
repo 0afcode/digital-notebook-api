@@ -1,4 +1,4 @@
-import { Page } from './page';
+import { Page } from './page.entity';
 
 describe('Page', () => {
   it('should be defined', () => {

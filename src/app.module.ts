@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSourceOptions } from 'typeorm';
 import { NotebookModule } from './notebook/notebook.module';
 import { SectionModule } from './section/section.module';
+import { PageModule } from './page/page.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { SectionModule } from './section/section.module';
     UserModule,
     NotebookModule,
     SectionModule,
+    PageModule,
   ],
   controllers: [AppController],
   providers: [AppService, DbTestService],
