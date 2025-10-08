@@ -1,21 +1,36 @@
 import { AuditBaseEntity } from 'src/common/AuditBaseEntity.abstract';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Section } from 'src/section/section.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Page extends AuditBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    default: 'New Page',
+  })
   title: string;
 
   @Column({
-    type: 'text',
-    array: true,
+    type: 'simple-array',
     nullable: true,
   })
   tags?: string[];
 
   @Column()
   content: string;
+
+  @Column()
+  sectionId: string;
+
+  @ManyToOne(() => Section, (sec: Section) => sec.pages)
+  @JoinColumn({ name: 'sectionId' })
+  section: Section;
 }

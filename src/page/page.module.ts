@@ -4,5 +4,7 @@ import { Page } from './page.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Page])],
+  exports: [],
+  providers: [],
 })
 export class PageModule {}
