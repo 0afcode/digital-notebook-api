@@ -12,7 +12,7 @@ import {
 
 @Entity()
 export class Notebook extends AuditBaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ length: 300 })

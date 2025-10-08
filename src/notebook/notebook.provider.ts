@@ -16,8 +16,9 @@ export class NotebookProvider {
     private readonly notebookRepository: Repository<Notebook>,
   ) {}
 
-  async create(data: CreateNotebookDTO): Promise<Notebook> {
+  async create(data: CreateNotebookDTO, user: User): Promise<Notebook> {
     const newNb = this.notebookRepository.create(data);
+    AuditBaseEntity.updateAuditFields(newNb, 'create', user);
     return this.notebookRepository.save(newNb);
   }
 
@@ -31,7 +32,7 @@ export class NotebookProvider {
       if (data.description) notebookExists.description = data.description;
       if (data.name) notebookExists.name = data.name;
       if (data.userId) notebookExists.userId = data.userId;
-      AuditBaseEntity.upateAuditFields(notebookExists, 'update', user);
+      AuditBaseEntity.updateAuditFields(notebookExists, 'update', user);
       return this.notebookRepository.update(id, data);
     }
     return null;
@@ -76,7 +77,7 @@ export class NotebookProvider {
     try {
       const data = await this.findById(id);
       if (!data) return false;
-      AuditBaseEntity.upateAuditFields(data, 'delete', user);
+      AuditBaseEntity.updateAuditFields(data, 'delete', user);
       const res = await this.update(id, data, user);
       return !!res;
     } catch (e) {
