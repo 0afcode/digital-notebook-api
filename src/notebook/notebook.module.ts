@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { NotebookController } from './notebook.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Notebook } from './notebook.entity';
-import { NotebookProvider } from './notebook.provider';
+import { NotebookProvider } from './notebook.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Notebook])],

@@ -8,7 +8,11 @@ async function bootstrap() {
       process.env.NODE_ENV === 'development' ? ['verbose'] : ['error', 'warn'],
   });
   app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      enableDebugMessages: true,
+    }),
   );
   await app.listen(process.env.PORT ?? 3003);
 }
